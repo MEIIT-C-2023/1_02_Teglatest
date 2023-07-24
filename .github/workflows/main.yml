@@ -1,0 +1,24 @@
+name: create_feedback
+on: push
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    container: docker://ghcr.io/iterative/cml:0-dvc2-base1
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup
+        run: |
+          sudo apt-get update
+          sudo apt-get install libcunit1 libcunit1-doc libcunit1-dev
+          gcc test.c -o test -lm -lcunit
+          gcc main.c -o main -lm
+      - name: test
+        run: |
+          echo '# Eredmények' > report.md
+          ./test >> report.md
+      - name: comment
+        if: always()
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml comment create report.md
