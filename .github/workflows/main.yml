@@ -10,8 +10,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install libcunit1 libcunit1-doc libcunit1-dev
-          gcc test.c -o test -lm -lcunit
           gcc main.c -o main -lm
+          gcc test.c -o test -lm -lcunit
       - name: test
         run: |
           echo '# Eredmények' > report.md
